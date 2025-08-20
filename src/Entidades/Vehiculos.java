@@ -10,12 +10,7 @@ import Excepciones.VehiculoExcepciones.EstadoInvalidoExcepcion;
 import Excepciones.VehiculoExcepciones.CampoVacioExcepcion;
 import Excepciones.VehiculoExcepciones.PlacaInvalidaExcepcion;
 import Validaciones.ValidarVehiculos;
-import Entidades.TipoVehiculo;
-
-import java.time.Year;
 import java.util.Objects;
-import java.util.regex.Pattern;
-
 /**
  *
  * @author Valdelomaar
@@ -30,16 +25,15 @@ public class Vehiculos {
     private EstadoVehiculos estado;
 
     public Vehiculos(String placa, String marca, String modelo, int anio, TipoVehiculo tipo, EstadoVehiculos estadoInicial) 
-            throws PlacaInvalidaExcepcion, CampoVacioExcepcion,
-                AñoIncorrectoExcepcion, EstadoInvalidoExcepcion {
+        throws PlacaInvalidaExcepcion, CampoVacioExcepcion, AñoIncorrectoExcepcion, EstadoInvalidoExcepcion {
     this.placa  = ValidarVehiculos.placa(placa);
     this.marca  = ValidarVehiculos.obligatorio(marca);
     this.modelo = ValidarVehiculos.obligatorio(modelo);
     this.anio   = ValidarVehiculos.anio(anio);
     this.tipo   = ValidarVehiculos.tipo(tipo);
     this.estado = (estadoInicial == null)
-            ? EstadoVehiculos.DISPONIBLE
-            : ValidarVehiculos.estado(estadoInicial);
+        ? EstadoVehiculos.DISPONIBLE
+        : ValidarVehiculos.estado(estadoInicial);
     }
     
     public String getPlaca() {
