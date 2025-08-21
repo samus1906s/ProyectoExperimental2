@@ -8,6 +8,6 @@ package Excepciones.ClientesExcepciones;
  *
  * @author samue
  */
-public class ClienteNoExiste {
+public class ClienteNoEncontrado {
     
 }

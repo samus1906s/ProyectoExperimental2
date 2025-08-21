@@ -12,6 +12,7 @@ import java.time.LocalDate;
  */
 public class Empleado extends Persona {
     private TipoPuesto trabajo;
+    private double salario;
 
     public TipoPuesto getTrabajo() {
         return trabajo;
@@ -22,13 +23,28 @@ public class Empleado extends Persona {
         this.trabajo = trabajo;
     }
 
-    public Empleado(String cedula, String nombre, LocalDate fechaNacimiento, String telefono, String correo) {
+    public double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(double salario) {
+        if(ValidarSalario(salario))
+            this.salario = salario;
+    }
+
+    public Empleado(String cedula, String nombre, LocalDate fechaNacimiento, String telefono, String correo, double salario) {
         super(cedula, nombre, fechaNacimiento, telefono, correo);
-        if(trabajo != null){
+        if(ValidarSalario(salario)) 
+        this.trabajo = trabajo;
+       if(trabajo != null){
          this.trabajo = trabajo;
         }else
         this.trabajo = TipoPuesto.GERENTE;
     }
     
     
+    
+    public static boolean ValidarSalario(double salario){
+        return salario >= 5000;
+    }
 }
