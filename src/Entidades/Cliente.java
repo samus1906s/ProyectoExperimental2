@@ -4,11 +4,13 @@
  */
 package Entidades;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author samue
  */
-public class Cliente {
+public class Cliente extends Persona {
     private String licenciaconductor;
 
     public String getLicenciaconductor() {
@@ -20,11 +22,12 @@ public class Cliente {
             this.licenciaconductor = licenciaconductor;
     }
 
-    public Cliente(String licenciaconductor) {
+    public Cliente(String licenciaconductor, String cedula, String nombre, LocalDate fechaNacimiento, String telefono, String correo) {
+        super(cedula, nombre, fechaNacimiento, telefono, correo);
         if(validarLicencias(licenciaconductor)) 
         this.licenciaconductor = licenciaconductor;
     }
-    
+
     public static boolean validarLicencias(String licencias){
         return licencias != null && !licencias.trim().isEmpty();
     }
