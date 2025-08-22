@@ -8,6 +8,10 @@ package Excepciones.ContratoExcepciones;
  *
  * @author je110
  */
-public class ContratoNoEncontradoExcepcion {
+public class ContratoNoEncontradoExcepcion extends Exception {
+
+    public ContratoNoEncontradoExcepcion() {
+        super();
+    }
     
 }

@@ -8,6 +8,10 @@ package Excepciones.ContratoExcepciones;
  *
  * @author je110
  */
-public class FechaInvalidaExcepcion {
+public class FechaInvalidaExcepcion extends Exception {
+
+    public FechaInvalidaExcepcion() {
+        super();
+    }
     
 }

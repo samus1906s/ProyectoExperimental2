@@ -8,6 +8,10 @@ package Excepciones.ContratoExcepciones;
  *
  * @author je110
  */
-public class VehiculoNoDisponibleExcepcion {
+public class VehiculoNoDisponibleExcepcion extends Exception {
+
+    public VehiculoNoDisponibleExcepcion() {
+        super();
+    }
     
 }

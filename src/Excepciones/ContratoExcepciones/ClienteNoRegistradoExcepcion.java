@@ -8,6 +8,10 @@ package Excepciones.ContratoExcepciones;
  *
  * @author je110
  */
-public class ClienteNoRegistradoExcepcion {
+public class ClienteNoRegistradoExcepcion extends Exception {
+
+    public ClienteNoRegistradoExcepcion() {
+        super();
+    }
     
 }
