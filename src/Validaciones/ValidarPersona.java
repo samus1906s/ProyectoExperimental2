@@ -9,28 +9,25 @@ import java.time.Period;
 
 /**
  *
- * @author je110
+ * @author Eduard Salas Murillo
  */
 public abstract class ValidarPersona {
     
-    public static int calculateAge(LocalDate date){
-        return Period.between(date, LocalDate.now()).getYears();
+    public static boolean calcularEdad(LocalDate fechaNacimiento){
+       int edad = Period.between( fechaNacimiento, LocalDate.now()).getYears();
+       return edad>=18;
     }
     
-    public static boolean isLegalAge(LocalDate date){
-        return calculateAge(date) >= 18;
-    }
-  
-    public static boolean validarEmail(String email) {
-        return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
+    public static boolean FechaNoFutura(LocalDate date){
+        return !date.isAfter(LocalDate.now());
     }
     
-    public static boolean validarTelefono(String telefono) {
-        return telefono.matches("\\d{8}"); 
+    public static boolean ValidarTelefono(String telefono){
+        return telefono.matches("^[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}$");
     }
     
-    public static boolean validarCedula(String cedula) {
-        return cedula.matches("\\d{9}"); 
+    public static boolean ValidarCorreo(String correo){
+        return correo.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
     }
 }
 

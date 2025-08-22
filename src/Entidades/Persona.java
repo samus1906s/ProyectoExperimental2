@@ -4,8 +4,7 @@
  */
 package Entidades;
 
-import java.time.LocalDate;
-
+import Validaciones.ValidarPersona;
 import java.time.LocalDate;
 
 /**
@@ -30,6 +29,10 @@ public abstract class Persona {
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
+
+    public boolean calcularEdad(){
+        return ValidarPersona.calcularEdad(fechaNacimiento);
+    }
     
     public String getTelefono() {
         return telefono;
@@ -50,8 +53,11 @@ public abstract class Persona {
     public Persona(String cedula, String nombre, LocalDate fechaNacimiento, String telefono, String correo) {
         this.cedula = cedula;
         this.nombre = nombre;
+        if(ValidarPersona.FechaNoFutura(fechaNacimiento))
         this.fechaNacimiento = fechaNacimiento;
+        if(ValidarPersona.ValidarTelefono(telefono))
         this.telefono = telefono;
+        if(ValidarPersona.ValidarCorreo(correo))
         this.correo = correo;
     }
     
