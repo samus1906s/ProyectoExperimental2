@@ -6,21 +6,20 @@ package Entidades;
 
 /**
  *
- * @author Eduard Salas Murillo
+ * @author je110
  */
 public enum EstadoContrato {
     ACTIVO("Activo"),
     FINALIZADO("Finalizado"),
     CANCELADO("Cancelado");
     
-    private String estadoContrato;
+    private String contratoEstado;
 
-    public String getEstadoContrato() {
-        return estadoContrato;
+    public String getContratoEstado() {
+        return contratoEstado;
     }
 
-    private EstadoContrato(String estadoContrato) {
-        this.estadoContrato = estadoContrato;
+    private EstadoContrato(String contratoEstado) {
+        this.contratoEstado = contratoEstado;
     }
-   
 }

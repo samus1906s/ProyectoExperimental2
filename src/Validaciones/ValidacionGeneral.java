@@ -15,12 +15,12 @@ import java.util.Map;
  */
 public class ValidacionGeneral {
     
-     public static boolean ClienteRegistrado(Cliente cedula, Map<String,Cliente> clientes) {
-        return clientes.containsKey(cedula);
-    }
+   public static boolean ClienteRegistrado(Cliente cliente, Map<String,Cliente> clientes) {
+        return cliente != null && clientes.containsKey(cliente.getCedula());
+   }
 
     public static boolean VehiculoRegistrado(Vehiculos placa, Map<String,Vehiculos> vehiculos) {
-        return vehiculos.containsKey(placa);
+        return vehiculos != null && vehiculos.containsKey(placa.getPlaca());
     }
 
     public static boolean FechaInicioValida(LocalDate fechaInicio) {
