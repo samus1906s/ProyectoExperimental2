@@ -30,7 +30,7 @@ public abstract class ValidarReservas {
             Map<Integer,Reserva> reservas
     ) {
         for (Reserva r : reservas.values()) {
-            if (r.getPlacaVehiculo().equals(placa)) {
+            if (r.getVehiculo().equals(placa)) {
                 boolean solapado = !(fechaFin.isBefore(r.getFechaInicio()) || fechaInicio.isAfter(r.getFechaFin()));
                 if (solapado) {
                     return false;

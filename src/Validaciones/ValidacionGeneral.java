@@ -15,25 +15,26 @@ import java.util.Map;
  */
 public class ValidacionGeneral {
     
-   public static boolean ClienteRegistrado(Cliente cliente, Map<String,Cliente> clientes) {
-        return cliente != null && clientes.containsKey(cliente.getCedula());
+   public static boolean ClienteRegistrado(String cedula, Map<String,Cliente> clientes) {
+        return cedula != null && clientes.containsKey(cedula);
    }
 
-    public static boolean VehiculoRegistrado(Vehiculos placa, Map<String,Vehiculos> vehiculos) {
-        return vehiculos != null && vehiculos.containsKey(placa.getPlaca());
+    public static boolean VehiculoRegistrado(String placa, Map<String,Vehiculos> vehiculos) {
+        return vehiculos != null && vehiculos.containsKey(placa);
     }
 
     public static boolean FechaInicioValida(LocalDate fechaInicio) {
-        return !fechaInicio.isBefore(LocalDate.now());
+        return fechaInicio != null && !fechaInicio.isBefore(LocalDate.now());
     }
-
+    
     public static boolean FechaFinPosterior(LocalDate fechaInicio, LocalDate fechaFin) {
-        return fechaFin.isAfter(fechaInicio);
+        return fechaInicio != null && fechaFin != null && fechaFin.isAfter(fechaInicio);
     }
     
     public static boolean FechasDeRangoValidas(LocalDate fechaInicio1, LocalDate fechaFin1, LocalDate fechaInicio2, LocalDate fechaFin2) {
         return !fechaFin1.isBefore(fechaInicio2) && !fechaInicio1.isAfter(fechaFin2);
     }
+    
     
 }
 

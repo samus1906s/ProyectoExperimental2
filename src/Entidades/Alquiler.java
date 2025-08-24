@@ -107,20 +107,20 @@ public class Alquiler {
 
     public Alquiler(String alquilerID, Cliente cliente, Vehiculos vehiculo, LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria, Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos) throws FechaInvalidaExcepcion, ContratoNoValidoExcepcion, TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion, VehiculoNoRegistradoExcepcion, TransicionEstadoNoPermitidoExcepcion, EstadoInvalidoExcepcion {
     
-        validarParametrosConstructor(alquilerID, cliente, vehiculo, fechaInicial, fechaFinal, tarifaDiaria, clientes, vehiculos);
+    validarParametrosConstructor(alquilerID, cliente, vehiculo, fechaInicial, fechaFinal, tarifaDiaria, clientes, vehiculos);
     
-        this.alquilerID = alquilerID;
-        this.estadoAlquiler = EstadoAlquiler.ACTIVO;
-        this.cliente = cliente;
-        this.vehiculo = vehiculo;
-        this.reserva = null;
-        this.fechaInicial = fechaInicial;
-        this.fechaFinal = fechaFinal;
-        this.tarifaDiaria = tarifaDiaria;
+    this.alquilerID = alquilerID;
+    this.estadoAlquiler = EstadoAlquiler.ACTIVO;
+    this.cliente = cliente;
+    this.vehiculo = vehiculo;
+    this.reserva = null;
+    this.fechaInicial = fechaInicial;
+    this.fechaFinal = fechaFinal;
+    this.tarifaDiaria = tarifaDiaria;
     
-        calcularDias_Y_Monto();
-        inicializarContrato();
-    }
+    calcularDias_Y_Monto();
+    inicializarContrato();
+}
 
     private void calcularDias_Y_Monto() {
         this.dias = (int) ChronoUnit.DAYS.between(fechaInicial, fechaFinal);
@@ -196,17 +196,17 @@ public class Alquiler {
         }
     }
 
-    private void validarParametrosConstructor(String alquilerID, Cliente cedulaCliente, Vehiculos placaVehiculo, LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria, Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos) throws ContratoNoValidoExcepcion, FechaInvalidaExcepcion, TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion, VehiculoNoRegistradoExcepcion {
+    private void validarParametrosConstructor(String alquilerID, Cliente cliente, Vehiculos vehiculo, LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria, Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos) throws ContratoNoValidoExcepcion, FechaInvalidaExcepcion, TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion, VehiculoNoRegistradoExcepcion {
 
     if (alquilerID == null || alquilerID.trim().isEmpty()) {
         throw new ContratoNoValidoExcepcion();
     }
 
-    if (cliente == null || !ValidacionGeneral.ClienteRegistrado(cedulaCliente, clientes)) {
+    if (cliente == null || !ValidacionGeneral.ClienteRegistrado(cliente.getCedula(), clientes)) {
         throw new ClienteNoRegistradoExcepcion();
     }
 
-    if (vehiculo == null || !ValidacionGeneral.VehiculoRegistrado(placaVehiculo, vehiculos)) {
+    if (vehiculo == null || !ValidacionGeneral.VehiculoRegistrado(vehiculo.getPlaca(), vehiculos)) {
         throw new VehiculoNoRegistradoExcepcion();
     }
 
