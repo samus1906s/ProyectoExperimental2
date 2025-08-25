@@ -3,11 +3,78 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Gestiones;
+import Entidades.Cliente;
+import Validaciones.ValidarPersona;
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.Period;
+import Interfaces.Listas;
 
 /**
  *
  * @author samue
  */
-public class GestionClientesArrayList {
+public class GestionClientesArrayList implements Listas<Cliente> {
+    private ArrayList<Cliente> clientes;
+
+    public GestionClientesArrayList() {
+        this.clientes = new ArrayList<>();
+    }
+
+    public ArrayList<Cliente> getClientes() {
+        return clientes;
+    }
+
+    @Override
+    public boolean agregar(Cliente cliente) {
+        if (cliente != null && cliente.getCedula() != null) {
+            if (!existeClientePorCedula(cliente.getCedula())) {
+                if (cliente.getLicenciaconductor() == null || cliente.getLicenciaconductor().trim().isEmpty()) {
+                    return false;
+                }
+                if (!ValidarPersona.calcularEdad(cliente.getFechaNacimiento())) {
+                    return false; 
+                }
+                if (!ValidarPersona.ValidarCorreo(cliente.getCorreo())) {
+                    return false;
+                }
+                if (!ValidarPersona.ValidarTelefono(cliente.getTelefono())) {
+                    return false;
+                }
+                clientes.add(cliente);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean eliminar(Cliente cliente) {
+        if (cliente != null && cliente.getCedula() != null) {
+            Cliente eliminado = buscar(cliente.getCedula());
+            if (eliminado != null) {
+                return clientes.remove(eliminado);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Cliente buscar(Object id) {
+        if (id != null) {
+            String cedula = String.valueOf(id);
+            for (Cliente cliente : clientes) {
+                if (cliente.getCedula().equals(cedula)) {
+                    return cliente;
+                }
+            }
+        }
+        return null;
+    }
+    
+     private boolean existeClientePorCedula(String cedula) {
+        return buscar(cedula) != null;
+    }
+    
     
 }

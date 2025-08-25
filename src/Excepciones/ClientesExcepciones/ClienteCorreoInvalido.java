@@ -8,6 +8,10 @@ package Excepciones.ClientesExcepciones;
  *
  * @author samue
  */
-public class ClienteCorreoInvalido {
+public class ClienteCorreoInvalido extends Exception {
+
+    public ClienteCorreoInvalido() {
+        super();
+    }
     
 }
