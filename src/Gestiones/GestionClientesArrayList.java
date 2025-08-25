@@ -27,25 +27,15 @@ public class GestionClientesArrayList implements Listas<Cliente> {
 
     @Override
     public boolean agregar(Cliente cliente) {
-        if (cliente != null && cliente.getCedula() != null) {
-            if (!existeClientePorCedula(cliente.getCedula())) {
-                if (cliente.getLicenciaconductor() == null || cliente.getLicenciaconductor().trim().isEmpty()) {
-                    return false;
-                }
-                if (!ValidarPersona.calcularEdad(cliente.getFechaNacimiento())) {
-                    return false; 
-                }
-                if (!ValidarPersona.ValidarCorreo(cliente.getCorreo())) {
-                    return false;
-                }
-                if (!ValidarPersona.ValidarTelefono(cliente.getTelefono())) {
-                    return false;
-                }
-                clientes.add(cliente);
-                return true;
-            }
-        }
+        if (cliente == null || cliente.getCedula() == null || existeClientePorCedula(cliente.getCedula()) ||
+        cliente.getLicenciaconductor() == null || cliente.getLicenciaconductor().trim().isEmpty() ||
+        !ValidarPersona.calcularEdad(cliente.getFechaNacimiento()) ||
+        !ValidarPersona.ValidarCorreo(cliente.getCorreo()) ||
+        !ValidarPersona.ValidarTelefono(cliente.getTelefono())) {
         return false;
+    }
+    clientes.add(cliente);
+    return true;
     }
 
     @Override

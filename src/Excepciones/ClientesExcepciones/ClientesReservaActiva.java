@@ -8,6 +8,10 @@ package Excepciones.ClientesExcepciones;
  *
  * @author samue
  */
-public class ClientesReservaActiva {
+public class ClientesReservaActiva extends Exception {
 
+    public ClientesReservaActiva() {
+        super();
+    }
+    
 }

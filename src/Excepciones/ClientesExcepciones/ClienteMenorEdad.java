@@ -8,6 +8,10 @@ package Excepciones.ClientesExcepciones;
  *
  * @author samue
  */
-public class ClienteMenorEdad {
+public class ClienteMenorEdad extends Exception {
+
+    public ClienteMenorEdad() {
+        super();
+    }
     
 }

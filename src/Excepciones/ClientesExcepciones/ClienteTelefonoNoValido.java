@@ -8,6 +8,10 @@ package Excepciones.ClientesExcepciones;
  *
  * @author samue
  */
-public class ClienteTelefonoNoValido {
+public class ClienteTelefonoNoValido extends Exception {
+
+    public ClienteTelefonoNoValido() {
+        super();
+    }
     
 }

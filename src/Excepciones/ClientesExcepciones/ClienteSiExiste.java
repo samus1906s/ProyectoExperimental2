@@ -8,6 +8,10 @@ package Excepciones.ClientesExcepciones;
  *
  * @author samue
  */
-public class ClienteSiExiste {
+public class ClienteSiExiste extends Exception {
+
+    public ClienteSiExiste() {
+        super();
+    }
     
 }

@@ -8,6 +8,10 @@ package Excepciones.ClientesExcepciones;
  *
  * @author samue
  */
-public class ClienteNoEncontrado {
+public class ClienteNoEncontrado extends Exception {
+
+    public ClienteNoEncontrado() {
+        super();
+    }
     
 }
