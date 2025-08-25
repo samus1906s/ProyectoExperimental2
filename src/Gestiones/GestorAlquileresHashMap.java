@@ -6,82 +6,136 @@ package Gestiones;
 
 import Entidades.Alquiler;
 import Entidades.EstadoAlquiler;
-import Excepciones.VehiculoExcepciones.EstadoInvalidoExcepcion;
-import Excepciones.VehiculoExcepciones.TransicionEstadoNoPermitidoExcepcion;
+import Excepciones.ContratoExcepciones.FechaInvalidaExcepcion;
 import Interfaces.Listas;
+import Validaciones.ValidacionGeneral;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-/**
- *
- * @author je110
- */
-public class GestorAlquileresHashMap implements Listas <Alquiler> {
-    HashMap<String, Alquiler> alquileres;
-    
+public class GestorAlquileresHashMap implements Listas<Alquiler> {
+
+    HashMap<Integer, Alquiler> alquileres;
+
     public GestorAlquileresHashMap() {
         this.alquileres = new HashMap<>();
     }
-    
-    public HashMap<String, Alquiler> getAlquileres() {
+
+    public HashMap<Integer, Alquiler> getAlquileres() {
         return alquileres;
     }
-    
+
     @Override
     public boolean agregar(Alquiler alquiler) {
-        if (alquiler != null && alquiler.getAlquilerID() != null) {
-            if (!alquileres.containsKey(alquiler.getAlquilerID())) {
-                alquileres.put(alquiler.getAlquilerID(), alquiler);
+        if (alquiler != null) {
+            int id = alquiler.getAlquilerID();
+            if (!alquileres.containsKey(id)) {
+                if (existeAlquilerActivoEnRango(alquiler.getVehiculo().getPlaca(),
+                    alquiler.getFechaInicial(), alquiler.getFechaFinal())) {
+                    return false;
+                }
+                alquileres.put(id, alquiler);
                 return true;
             }
         }
         return false;
     }
-    
+
     @Override
     public boolean eliminar(Alquiler alquiler) {
-        if (alquiler != null && alquiler.getAlquilerID() != null) {
-            Alquiler eliminado = alquileres.remove(alquiler.getAlquilerID());
-            return eliminado != null;
+        if (alquiler != null) {
+            int id = alquiler.getAlquilerID();
+            Alquiler alq = alquileres.get(id);
+            if (alq != null && alq.getEstadoAlquiler() != EstadoAlquiler.ACTIVO) {
+                alquileres.remove(id);
+                return true;
+            }
         }
         return false;
     }
-    
+
     @Override
     public Alquiler buscar(Object id) {
-        if (id != null) {
-            String alquilerId = String.valueOf(id);
-            return alquileres.get(alquilerId);
+        if (id instanceof Integer) {
+            return alquileres.get((Integer) id);
+        } else if (id instanceof String) { 
+            try {
+                int intId = Integer.parseInt((String) id);
+                return alquileres.get(intId);
+            } catch (NumberFormatException e) {
+                return null;
+            }
         }
         return null;
     }
+
+    public List<Alquiler> buscarPorCliente(String cedula) {
+        List<Alquiler> resultados = new ArrayList<>();
+        for (Alquiler alq : alquileres.values()) {
+            if (alq.getCliente() != null && alq.getCliente().getCedula().equals(cedula)) {
+                resultados.add(alq);
+            }
+        }
+        return resultados;
+    }
+
+    public List<Alquiler> buscarPorVehiculo(String placa) {
+        List<Alquiler> resultados = new ArrayList<>();
+        for (Alquiler a : alquileres.values()) {
+            if (a.getVehiculo() != null && a.getVehiculo().getPlaca().equals(placa)) {
+                resultados.add(a);
+            }
+        }
+        return resultados;
+    }
     
-    public boolean existeAlquilerActivoEnRango(String placaVehiculo, LocalDate fechaInicio, LocalDate fechaFin) {
-        for (Alquiler alquiler : alquileres.values()) {
-            if (alquiler.getVehiculo() != null && 
-                alquiler.getVehiculo().getPlaca().equals(placaVehiculo) &&
-                alquiler.getEstadoAlquiler() == EstadoAlquiler.ACTIVO) {
-                
-                if (!(fechaFin.isBefore(alquiler.getFechaInicial()) || 
-                      fechaInicio.isAfter(alquiler.getFechaFinal()))) {
-                    return true; 
+    public boolean actualizarFechasAlquiler(int alquilerID, LocalDate nuevaInicio, LocalDate nuevaFin) throws FechaInvalidaExcepcion {
+        Alquiler alquiler = alquileres.get(alquilerID);
+        
+        if (alquiler == null) return false; 
+
+        if (nuevaInicio == null || nuevaFin == null) throw new FechaInvalidaExcepcion();
+        
+        if (!ValidacionGeneral.FechaFinPosterior(nuevaInicio, nuevaFin)) throw new FechaInvalidaExcepcion();
+
+        for (Alquiler a : alquileres.values()) {
+            
+            if (a.getAlquilerID() != alquilerID && a.getVehiculo().getPlaca().equals(alquiler.getVehiculo().getPlaca()) &&a.getEstadoAlquiler() == EstadoAlquiler.ACTIVO) {
+            
+                if (!(nuevaFin.isBefore(a.getFechaInicial()) || nuevaInicio.isAfter(a.getFechaFinal()))) {
+                    return false; 
+                }
+            }
+        }
+
+        alquiler.setFechaInicial(nuevaInicio);
+        alquiler.setFechaFinal(nuevaFin);
+
+        return true; 
+    }
+
+    public boolean existeAlquilerActivoEnRango(String placaVehiculo, LocalDate inicio, LocalDate fin) {
+        for (Alquiler a : alquileres.values()) {
+            if (a.getVehiculo() != null && a.getVehiculo().getPlaca().equals(placaVehiculo) &&
+                a.getEstadoAlquiler() == EstadoAlquiler.ACTIVO) {
+                if (!(fin.isBefore(a.getFechaInicial()) || inicio.isAfter(a.getFechaFinal()))) {
+                    return true;
                 }
             }
         }
         return false;
     }
-    
+
     public ArrayList<Alquiler> obtenerContratosVigentes() {
         ArrayList<Alquiler> vigentes = new ArrayList<>();
-        
-        for (Alquiler alquiler : alquileres.values()) {
-            if (alquiler != null && alquiler.contratoVigente()) {
-                vigentes.add(alquiler);
+        for (Alquiler a : alquileres.values()) {
+            if (a.contratoVigente()) {
+                vigentes.add(a);
             }
         }
-        
         return vigentes;
     }
-    
 }
+

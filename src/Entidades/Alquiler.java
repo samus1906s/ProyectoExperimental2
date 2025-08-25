@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class Alquiler {
     
-    private String alquilerID;
+    private int alquilerID;
     private EstadoAlquiler estadoAlquiler;
     private Cliente cliente;
     private Vehiculos vehiculo;
@@ -31,7 +31,7 @@ public class Alquiler {
     private double montoTotal;
     private int dias;
 
-    public String getAlquilerID() {
+    public int getAlquilerID() {
         return alquilerID;
     }
 
@@ -105,22 +105,39 @@ public class Alquiler {
         recalcularAlquiler();
     }
 
-    public Alquiler(String alquilerID, Cliente cliente, Vehiculos vehiculo, LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria, Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos) throws FechaInvalidaExcepcion, ContratoNoValidoExcepcion, TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion, VehiculoNoRegistradoExcepcion, TransicionEstadoNoPermitidoExcepcion, EstadoInvalidoExcepcion {
-    
-    validarParametrosConstructor(alquilerID, cliente, vehiculo, fechaInicial, fechaFinal, tarifaDiaria, clientes, vehiculos);
-    
-    this.alquilerID = alquilerID;
-    this.estadoAlquiler = EstadoAlquiler.ACTIVO;
-    this.cliente = cliente;
-    this.vehiculo = vehiculo;
-    this.reserva = null;
-    this.fechaInicial = fechaInicial;
-    this.fechaFinal = fechaFinal;
-    this.tarifaDiaria = tarifaDiaria;
-    
-    calcularDias_Y_Monto();
-    inicializarContrato();
-}
+    public Alquiler(Reserva reserva,double tarifaDiaria ,Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos)throws FechaInvalidaExcepcion, ContratoNoValidoExcepcion,TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion,VehiculoNoRegistradoExcepcion, TransicionEstadoNoPermitidoExcepcion,EstadoInvalidoExcepcion {
+
+        if (reserva == null) throw new ContratoNoValidoExcepcion();
+
+        this.alquilerID = reserva.getIdReserva(); 
+        this.reserva = reserva;
+        this.cliente = reserva.getCliente();
+        this.vehiculo = reserva.getVehiculo();
+        this.fechaInicial = reserva.getFechaInicio();
+        this.fechaFinal = reserva.getFechaFin();
+        this.tarifaDiaria = tarifaDiaria;
+        this.estadoAlquiler = EstadoAlquiler.ACTIVO;
+
+        validarParametrosConstructor(this.alquilerID, cliente, vehiculo, fechaInicial, fechaFinal, tarifaDiaria, clientes, vehiculos);
+        calcularDias_Y_Monto();
+        actualizarEstadoVehiculo();
+    }
+     
+    public Alquiler(int alquilerID, Cliente cliente, Vehiculos vehiculo,LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria,Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos)throws FechaInvalidaExcepcion, ContratoNoValidoExcepcion,TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion,VehiculoNoRegistradoExcepcion, TransicionEstadoNoPermitidoExcepcion,EstadoInvalidoExcepcion {
+
+        this.alquilerID = alquilerID;
+        this.cliente = cliente;
+        this.vehiculo = vehiculo;
+        this.fechaInicial = fechaInicial;
+        this.fechaFinal = fechaFinal;
+        this.tarifaDiaria = tarifaDiaria;
+        this.estadoAlquiler = EstadoAlquiler.ACTIVO;
+        this.reserva = null;
+
+        validarParametrosConstructor(this.alquilerID, cliente, vehiculo, fechaInicial, fechaFinal, tarifaDiaria, clientes, vehiculos);
+        calcularDias_Y_Monto();
+        actualizarEstadoVehiculo();
+    }
 
     private void calcularDias_Y_Monto() {
         this.dias = (int) ChronoUnit.DAYS.between(fechaInicial, fechaFinal);
@@ -139,10 +156,6 @@ public class Alquiler {
     public boolean contratoVigente() {
         LocalDate fechaActual = LocalDate.now();
         return estadoAlquiler == EstadoAlquiler.ACTIVO && !fechaActual.isBefore(fechaInicial) && !fechaActual.isAfter(fechaFinal);
-    }
-
-    private void inicializarContrato() throws TransicionEstadoNoPermitidoExcepcion, EstadoInvalidoExcepcion {
-        actualizarEstadoVehiculo();
     }
 
     public void iniciarAlquiler() throws TransicionEstadoNoPermitidoExcepcion, EstadoInvalidoExcepcion {
@@ -196,48 +209,45 @@ public class Alquiler {
         }
     }
 
-    private void validarParametrosConstructor(String alquilerID, Cliente cliente, Vehiculos vehiculo, LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria, Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos) throws ContratoNoValidoExcepcion, FechaInvalidaExcepcion, TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion, VehiculoNoRegistradoExcepcion {
+    private void validarParametrosConstructor(int alquilerID, Cliente cliente, Vehiculos vehiculo, LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria, Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos) throws ContratoNoValidoExcepcion, FechaInvalidaExcepcion, TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion, VehiculoNoRegistradoExcepcion {
 
-    if (alquilerID == null || alquilerID.trim().isEmpty()) {
-        throw new ContratoNoValidoExcepcion();
-    }
+        if (alquilerID < 0) throw new ContratoNoValidoExcepcion();
 
-    if (cliente == null || !ValidacionGeneral.ClienteRegistrado(cliente.getCedula(), clientes)) {
-        throw new ClienteNoRegistradoExcepcion();
-    }
+        if (cliente == null || !ValidacionGeneral.ClienteRegistrado(cliente.getCedula(), clientes)) {
+            throw new ClienteNoRegistradoExcepcion();
+        }
 
-    if (vehiculo == null || !ValidacionGeneral.VehiculoRegistrado(vehiculo.getPlaca(), vehiculos)) {
-        throw new VehiculoNoRegistradoExcepcion();
-    }
+        if (vehiculo == null || !ValidacionGeneral.VehiculoRegistrado(vehiculo.getPlaca(), vehiculos)) {
+            throw new VehiculoNoRegistradoExcepcion();
+        }
 
-    if (fechaInicial == null || fechaFinal == null) {
-        throw new FechaInvalidaExcepcion();
-    }
+        if (fechaInicial == null || fechaFinal == null) {
+            throw new FechaInvalidaExcepcion();
+        }
     
-    if (!ValidacionGeneral.FechaInicioValida(fechaInicial)) {
-        throw new FechaInvalidaExcepcion();
-    }
+        if (!ValidacionGeneral.FechaInicioValida(fechaInicial)) {
+            throw new FechaInvalidaExcepcion();
+        }
     
-    if (!ValidacionGeneral.FechaFinPosterior(fechaInicial, fechaFinal)) {
-        throw new FechaInvalidaExcepcion();
+        if (!ValidacionGeneral.FechaFinPosterior(fechaInicial, fechaFinal)) {
+            throw new FechaInvalidaExcepcion();
+        }
+
+        if (tarifaDiaria <= 0) {
+            throw new TarifaNoValidaExcepcion();
+        }
     }
 
-    if (tarifaDiaria <= 0) {
-        throw new TarifaNoValidaExcepcion();
-    }
-}
-
-    @Override
+   @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        
-        Alquiler alquiler = (Alquiler) obj;
-        return alquilerID.equals(alquiler.alquilerID);
+        Alquiler other = (Alquiler) obj;
+        return alquilerID == other.alquilerID;
     }
 
     @Override
     public int hashCode() {
-        return alquilerID.hashCode();
+        return Integer.hashCode(alquilerID);
     }
 }
