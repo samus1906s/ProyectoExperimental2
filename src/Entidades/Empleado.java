@@ -35,7 +35,7 @@ public class Empleado extends Persona {
     public Empleado(String cedula, String nombre, LocalDate fechaNacimiento, String telefono, String correo, double salario) {
         super(cedula, nombre, fechaNacimiento, telefono, correo);
         if(ValidarSalario(salario)) 
-        this.trabajo = trabajo;
+        this.salario = 0;
        if(trabajo != null){
          this.trabajo = trabajo;
         }else

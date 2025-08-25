@@ -62,6 +62,19 @@ public class GestionClientesArrayList implements Listas<Cliente> {
         return null;
     }
     
+    public boolean actualizar(Cliente clienteActualizado) {
+    Cliente c = (clienteActualizado == null || clienteActualizado.getCedula() == null) ? null : buscar(clienteActualizado.getCedula());
+    if (c == null || !ValidarPersona.ValidarCorreo(clienteActualizado.getCorreo()) ||
+        !ValidarPersona.ValidarTelefono(clienteActualizado.getTelefono()) ||
+        clienteActualizado.getLicenciaconductor() == null || clienteActualizado.getLicenciaconductor().trim().isEmpty()) {
+        return false;
+    }
+    c.setTelefono(clienteActualizado.getTelefono());
+    c.setCorreo(clienteActualizado.getCorreo());
+    c.setLicenciaconductor(clienteActualizado.getLicenciaconductor());
+    return true;
+}
+    
      private boolean existeClientePorCedula(String cedula) {
         return buscar(cedula) != null;
     }
