@@ -8,9 +8,9 @@ package Excepciones.ContratoExcepciones;
  *
  * @author je110
  */
-public class ClienteNoRegistradoExcepcion extends Exception {
+public class AlquilerNoValidoExcepcion extends Exception {
 
-    public ClienteNoRegistradoExcepcion() {
+    public AlquilerNoValidoExcepcion() {
         super();
     }
     

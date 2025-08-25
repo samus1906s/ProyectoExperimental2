@@ -4,11 +4,11 @@
  */
 package Entidades;
 
-import Excepciones.ContratoExcepciones.ClienteNoRegistradoExcepcion;
-import Excepciones.ContratoExcepciones.ContratoNoValidoExcepcion;
+import Excepciones.ClientesExcepciones.ClienteNoEncontrado;
+import Excepciones.ContratoExcepciones.AlquilerNoValidoExcepcion;
 import Excepciones.ContratoExcepciones.FechaInvalidaExcepcion;
 import Excepciones.ContratoExcepciones.TarifaNoValidaExcepcion;
-import Excepciones.ContratoExcepciones.VehiculoNoRegistradoExcepcion;
+import Excepciones.VehiculoExcepciones.VehiculoNoEncontrado;
 import Excepciones.VehiculoExcepciones.EstadoInvalidoExcepcion;
 import Excepciones.VehiculoExcepciones.TransicionEstadoNoPermitidoExcepcion;
 import Validaciones.ValidacionGeneral;
@@ -105,9 +105,9 @@ public class Alquiler {
         recalcularAlquiler();
     }
 
-    public Alquiler(Reserva reserva,double tarifaDiaria ,Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos)throws FechaInvalidaExcepcion, ContratoNoValidoExcepcion,TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion,VehiculoNoRegistradoExcepcion, TransicionEstadoNoPermitidoExcepcion,EstadoInvalidoExcepcion {
+    public Alquiler(Reserva reserva,double tarifaDiaria ,Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos)throws FechaInvalidaExcepcion, AlquilerNoValidoExcepcion,TarifaNoValidaExcepcion, ClienteNoEncontrado, VehiculoNoEncontrado, TransicionEstadoNoPermitidoExcepcion, EstadoInvalidoExcepcion {
 
-        if (reserva == null) throw new ContratoNoValidoExcepcion();
+        if (reserva == null) throw new AlquilerNoValidoExcepcion();
 
         this.alquilerID = reserva.getIdReserva(); 
         this.reserva = reserva;
@@ -123,7 +123,7 @@ public class Alquiler {
         actualizarEstadoVehiculo();
     }
      
-    public Alquiler(int alquilerID, Cliente cliente, Vehiculos vehiculo,LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria,Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos)throws FechaInvalidaExcepcion, ContratoNoValidoExcepcion,TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion,VehiculoNoRegistradoExcepcion, TransicionEstadoNoPermitidoExcepcion,EstadoInvalidoExcepcion {
+    public Alquiler(int alquilerID, Cliente cliente, Vehiculos vehiculo,LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria,Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos)throws FechaInvalidaExcepcion, AlquilerNoValidoExcepcion, TarifaNoValidaExcepcion, ClienteNoEncontrado, VehiculoNoEncontrado, TransicionEstadoNoPermitidoExcepcion, EstadoInvalidoExcepcion {
 
         this.alquilerID = alquilerID;
         this.cliente = cliente;
@@ -209,16 +209,16 @@ public class Alquiler {
         }
     }
 
-    private void validarParametrosConstructor(int alquilerID, Cliente cliente, Vehiculos vehiculo, LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria, Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos) throws ContratoNoValidoExcepcion, FechaInvalidaExcepcion, TarifaNoValidaExcepcion, ClienteNoRegistradoExcepcion, VehiculoNoRegistradoExcepcion {
+    private void validarParametrosConstructor(int alquilerID, Cliente cliente, Vehiculos vehiculo, LocalDate fechaInicial, LocalDate fechaFinal, double tarifaDiaria, Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos) throws AlquilerNoValidoExcepcion, FechaInvalidaExcepcion, TarifaNoValidaExcepcion, ClienteNoEncontrado, VehiculoNoEncontrado {
 
-        if (alquilerID < 0) throw new ContratoNoValidoExcepcion();
+        if (alquilerID < 0) throw new AlquilerNoValidoExcepcion();
 
         if (cliente == null || !ValidacionGeneral.ClienteRegistrado(cliente.getCedula(), clientes)) {
-            throw new ClienteNoRegistradoExcepcion();
+            throw new ClienteNoEncontrado();
         }
 
         if (vehiculo == null || !ValidacionGeneral.VehiculoRegistrado(vehiculo.getPlaca(), vehiculos)) {
-            throw new VehiculoNoRegistradoExcepcion();
+            throw new VehiculoNoEncontrado();
         }
 
         if (fechaInicial == null || fechaFinal == null) {

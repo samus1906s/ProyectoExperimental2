@@ -8,7 +8,7 @@ import Validaciones.ValidarReservas;
 import java.time.LocalDate;
 import Entidades.Cliente;
 import Entidades.Vehiculos;
-import Excepciones.ReservaExcepciones.VehiculoNoDisponible;
+import Excepciones.VehiculoExcepciones.VehiculoNoDisponible;
 import java.util.Map;
 /**
  *

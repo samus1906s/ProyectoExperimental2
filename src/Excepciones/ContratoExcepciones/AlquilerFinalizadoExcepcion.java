@@ -8,9 +8,9 @@ package Excepciones.ContratoExcepciones;
  *
  * @author je110
  */
-public class ContratoFinalizadoExcepcion extends Exception{
+public class AlquilerFinalizadoExcepcion extends Exception{
 
-    public ContratoFinalizadoExcepcion() {
+    public AlquilerFinalizadoExcepcion() {
         super();
     }
     

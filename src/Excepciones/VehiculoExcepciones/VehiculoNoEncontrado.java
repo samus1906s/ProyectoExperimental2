@@ -2,15 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Excepciones.ContratoExcepciones;
+package Excepciones.VehiculoExcepciones;
 
 /**
  *
  * @author je110
  */
-public class ContratoNoValidoExcepcion extends Exception {
+public class VehiculoNoEncontrado extends Exception {
 
-    public ContratoNoValidoExcepcion() {
+    public VehiculoNoEncontrado() {
         super();
     }
     
