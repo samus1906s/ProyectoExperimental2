@@ -138,7 +138,7 @@ public class Alquiler {
 
     public boolean contratoVigente() {
         LocalDate fechaActual = LocalDate.now();
-        return !fechaActual.isBefore(fechaInicial) && !fechaActual.isAfter(fechaFinal);
+        return estadoAlquiler == EstadoAlquiler.ACTIVO && !fechaActual.isBefore(fechaInicial) && !fechaActual.isAfter(fechaFinal);
     }
 
     private void inicializarContrato() throws TransicionEstadoNoPermitidoExcepcion, EstadoInvalidoExcepcion {

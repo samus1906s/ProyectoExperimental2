@@ -57,32 +57,6 @@ public class GestorAlquileresHashMap implements Listas <Alquiler> {
         return null;
     }
     
-    public boolean cancelarAlquiler(String alquilerID) {
-        Alquiler alquiler = buscar(alquilerID);
-        if (alquiler != null) {
-            try {
-                alquiler.cancelarAlquiler();
-                return true; 
-            } catch (TransicionEstadoNoPermitidoExcepcion | EstadoInvalidoExcepcion e) {
-                return false; 
-            }
-        }  
-        return false; 
-    }
-    
-    public boolean finalizarAlquiler(String alquilerID) {
-        Alquiler alquiler = buscar(alquilerID);
-        if (alquiler != null) {
-            try {
-                alquiler.finalizarAlquiler();
-                return true;
-            } catch (TransicionEstadoNoPermitidoExcepcion | EstadoInvalidoExcepcion e) {
-                return false;
-            }
-        }
-        return false;
-    }
-    
     public boolean existeAlquilerActivoEnRango(String placaVehiculo, LocalDate fechaInicio, LocalDate fechaFin) {
         for (Alquiler alquiler : alquileres.values()) {
             if (alquiler.getVehiculo() != null && 
