@@ -57,6 +57,18 @@ public class VehiculosHashMap implements Listas<Vehiculos> {
         }
     }
 
+    public boolean actualizar(Vehiculos v){
+    try{
+        if(v==null)throw new CampoVacioExcepcion();
+        String k=key(v.getPlaca()); Vehiculos a=data.get(k);
+        if(a==null)return false;
+        String m=v.getModelo(); if(m!=null)a.setModelo(ValidarVehiculos.obligatorio(m));
+        if(v.getTipo()!=null)a.setTipo(ValidarVehiculos.tipo(v.getTipo()));
+        if(v.getEstado()!=null)a.setEstado(ValidarVehiculos.estado(v.getEstado()));
+        return true;
+    }catch(CampoVacioExcepcion|PlacaInvalidaExcepcion|EstadoInvalidoExcepcion|TransicionEstadoNoPermitidoExcepcion e){return false;}
+}
+    
     @Override
     public Vehiculos buscar(Object id){
         try{return data.get(key(String.valueOf(id)));}
