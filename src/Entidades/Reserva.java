@@ -8,7 +8,12 @@ import Validaciones.ValidarReservas;
 import java.time.LocalDate;
 import Entidades.Cliente;
 import Entidades.Vehiculos;
+import Excepciones.ClientesExcepciones.ClienteNoEncontrado;
+import Excepciones.ReservaExcepciones.DuracionReservaExcedida;
+import Excepciones.ReservaExcepciones.FechaInicioInvalida;
+import Excepciones.ReservaExcepciones.FechasDeReservasIncompletas;
 import Excepciones.VehiculoExcepciones.VehiculoNoDisponible;
+import Excepciones.VehiculoExcepciones.VehiculoNoEncontrado;
 import java.util.Map;
 /**
  *
@@ -55,38 +60,38 @@ public class Reserva {
         return estado;
     }
 
-    public Reserva(int idReserva, Cliente cliente, TipoVehiculo tipoVehiculo, Vehiculos vehiculo, LocalDate fechaInicio, LocalDate fechaFin, EstadoAlquiler estado, Map<String, Cliente> clientes, Map<Integer, Reserva> reservas, Map<String, Vehiculos> vehiculos) throws VehiculoNoDisponible {
+    public Reserva(int idReserva, Cliente cliente, TipoVehiculo tipoVehiculo, Vehiculos vehiculo, LocalDate fechaInicio, LocalDate fechaFin, EstadoAlquiler estado, Map<String, Cliente> clientes, Map<Integer, Reserva> reservas, Map<String, Vehiculos> vehiculos) throws ClienteNoEncontrado, VehiculoNoEncontrado, FechaInicioInvalida, FechasDeReservasIncompletas, DuracionReservaExcedida,VehiculoNoDisponible {
     
         if (cliente == null || !ValidacionGeneral.ClienteRegistrado(cliente.getCedula(), clientes)) {
-         //throw new Exception("Cliente no registrado");
+         throw new ClienteNoEncontrado();
         }
     
-    if (vehiculo == null || !ValidacionGeneral.VehiculoRegistrado(vehiculo.getPlaca(), vehiculos)) {
-        //throw new Exception("Vehículo no registrado");
-    }
+        if (vehiculo == null || !ValidacionGeneral.VehiculoRegistrado(vehiculo.getPlaca(), vehiculos)) {
+         throw new VehiculoNoEncontrado();
+        }
     
-    if (fechaInicio == null || !ValidacionGeneral.FechaInicioValida(fechaInicio)) {
-        //throw new Exception("Fecha de inicio inválida");
-    }
+      if (fechaInicio == null || !ValidacionGeneral.FechaInicioValida(fechaInicio)) {
+           throw new FechaInicioInvalida();
+        }
     
-    if (fechaFin == null || !ValidacionGeneral.FechaFinPosterior(fechaInicio, fechaFin)) {
-        //throw new Exception("Fecha de fin inválida");
-    }
+     if (fechaFin == null || !ValidacionGeneral.FechaFinPosterior(fechaInicio, fechaFin)) {
+         throw new FechasDeReservasIncompletas();
+        }
+     
+      if (!ValidarReservas.DuracionValida(fechaInicio, fechaFin)) {
+         throw new DuracionReservaExcedida();
+        }
     
-    if (!ValidarReservas.DuracionValida(fechaInicio, fechaFin)) {
-        //throw new DuracionReservaE(");
-    }
+     if (!ValidarReservas.VehiculoDisponible(vehiculo, fechaInicio, fechaFin, reservas)){
+         throw new VehiculoNoDisponible();
+        }
     
-    if (!ValidarReservas.VehiculoDisponible(vehiculo, fechaInicio, fechaFin, reservas)){
-        throw new VehiculoNoDisponible();
+     this.idReserva = idReserva;
+     this.cliente = cliente;
+     this.tipoVehiculo = tipoVehiculo;
+     this.vehiculo = vehiculo;
+     this.fechaInicio = fechaInicio;
+     this.fechaFin = fechaFin;
+     this.estado = estado;
     }
-    
-    this.idReserva = idReserva;
-    this.cliente = cliente;
-    this.tipoVehiculo = tipoVehiculo;
-    this.vehiculo = vehiculo;
-    this.fechaInicio = fechaInicio;
-    this.fechaFin = fechaFin;
-    this.estado = estado;
-}
 }

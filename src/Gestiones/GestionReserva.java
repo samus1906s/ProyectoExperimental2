@@ -4,6 +4,8 @@
  */
 package Gestiones;
 
+import Entidades.Alquiler;
+import Entidades.Cliente;
 import Entidades.Reserva;
 import Entidades.Vehiculos;
 import Interfaces.Listas;
@@ -56,32 +58,8 @@ public class GestionReserva implements Listas <Reserva> {
     }
 
     @Override
-    public Reserva buscar(Object busc) {
-     if (busc instanceof Integer) {
-         return reservasActivas.get(busc);
-        }
-      if (busc instanceof String) {
-          for (Reserva r : reservasActivas.values()) {
-              if (r.getCliente().equals(busc)){
-              } 
-            }
-        }
-       if (busc instanceof LocalDate[]) {
-         LocalDate[] rango = (LocalDate[]) busc;
-          if (rango.length == 2) {
-             LocalDate fechaInicio = rango[0];
-             LocalDate fechaFin = rango[1];
-
-             for (Reserva r : reservasActivas.values()) {
-                if (!(r.getFechaFin().isBefore(fechaInicio) || r.getFechaInicio().isAfter(fechaFin))) {
-                    
-                    return r; 
-                 }
-                }
-            }
-        }
-
-      return null;
+    public Reserva buscar(Object id) {
+     throw new UnsupportedOperationException("Not supported yet.");
     }
     
     public boolean modificar(int idReserva, Vehiculos nuevoVehiculo) {
@@ -99,27 +77,37 @@ public class GestionReserva implements Listas <Reserva> {
         return false;
     }
     
-    public boolean confirmarReserva(int idReserva) {
-        Reserva reservaAConfirmar = null;
-        for (Reserva r : reservasEnEspera) {
-            if (r.getIdReserva() == idReserva) {
-                reservaAConfirmar = r;
-                break;
+    public Alquiler confirmarReserva(int idReserva,double tarifaDiaria,Map<String, Cliente> clientes, Map<String, Vehiculos> vehiculos) {
+     Reserva reservaAConfirmar = null;
+     for (Reserva r : reservasEnEspera) {
+         if (r.getIdReserva() == idReserva) {
+            reservaAConfirmar = r;
+             break;
             }
         }
-
-        if (reservaAConfirmar != null) {
-            if (ValidarReservas.VehiculoDisponible(
-                reservaAConfirmar.getVehiculo(), 
-                reservaAConfirmar.getFechaInicio(), 
-                reservaAConfirmar.getFechaFin(), 
-                reservasActivas)) {
-                reservasEnEspera.remove(reservaAConfirmar);
-                reservasActivas.put(reservaAConfirmar.getIdReserva(), reservaAConfirmar);
-                // ya se que aqui debo enviarlo al modulo alquiler
-                return true;
-            }
+     if (reservaAConfirmar != null) {
+         if (ValidarReservas.VehiculoDisponible(
+                 reservaAConfirmar.getVehiculo(),
+                 reservaAConfirmar.getFechaInicio(),
+                 reservaAConfirmar.getFechaFin(),
+                 reservasActivas)) {
+                 reservasEnEspera.remove(reservaAConfirmar);
+                 reservasActivas.put(reservaAConfirmar.getIdReserva(), reservaAConfirmar);
+ 
+                 try {
+                     Alquiler nuevoAlquiler = new Alquiler(
+                     reservaAConfirmar,
+                     tarifaDiaria,
+                     clientes,
+                     vehiculos
+                    );
+                  return nuevoAlquiler;
+                } catch (Exception e) {
+                 e.printStackTrace();
+                 return null;
+                }
+            }  
         }
-        return false;
-    }
-}
+      return null; 
+    } 
+} 
