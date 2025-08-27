@@ -59,7 +59,17 @@ public class GestionReserva implements Listas <Reserva> {
 
     @Override
     public Reserva buscar(Object id) {
-     throw new UnsupportedOperationException("Not supported yet.");
+      if (id instanceof Integer) {
+          return reservasActivas.get((Integer) id);
+        }  else if (id instanceof String) {
+              try {
+                 int intId = Integer.parseInt((String) id);
+                 return reservasActivas.get(intId);
+                } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
     }
     
     public boolean modificar(int idReserva, Vehiculos nuevoVehiculo) {
